@@ -80,10 +80,10 @@ Returns the index of the last falsy element in a double-precision floating-point
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy( x.length, x, 1 );
-// returns 4
+// returns 5
 ```
 
 The function has the following parameters:
@@ -108,10 +108,10 @@ The `N` and stride parameters determine which elements in the strided array are 
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 0.0, 0.0, 2.0, 1.0, 3.0 ] );
 
-var idx = dlastIndexOfFalsy( 4, x, 2 );
-// returns 2
+var idx = dlastIndexOfFalsy( 3, x, 2 );
+// returns 1
 ```
 
 Note that indexing is relative to the first index. To introduce an offset, use [`typed array`][mdn-typed-array] views.
@@ -119,15 +119,15 @@ Note that indexing is relative to the first index. To introduce an offset, use [
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-// Initial array...
-var x0 = new Float64Array( [ 1.0, 3.0, 1.0, 0.0, 2.0, 1.0 ] );
+// Initial array:
+var x0 = new Float64Array( [ 1.0, 0.0, 1.0, 3.0, 5.0, 0.0 ] );
 
-// Create an offset view...
+// Create an offset view:
 var x1 = new Float64Array( x0.buffer, x0.BYTES_PER_ELEMENT*1 ); // start at 2nd element
 
-// Find index...
+// Find index:
 var idx = dlastIndexOfFalsy( 3, x1, 2 );
-// returns 1
+// returns 2
 ```
 
 #### dlastIndexOfFalsy.ndarray( N, x, strideX, offsetX )
@@ -137,10 +137,10 @@ Returns the index of the last falsy element in a double-precision floating-point
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy.ndarray( x.length, x, 1, 0 );
-// returns 4
+// returns 5
 ```
 
 The function has the following additional parameters:
@@ -152,7 +152,7 @@ While [`typed array`][mdn-typed-array] views mandate a view offset based on the 
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 0.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 1.0, 4.0, 0.0, 0.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy.ndarray( 3, x, 1, x.length-3 );
 // returns 1
@@ -168,6 +168,7 @@ var idx = dlastIndexOfFalsy.ndarray( 3, x, 1, x.length-3 );
 
 ## Notes
 
+-   If `N <= 0`, both functions return `-1`.
 -   Both functions explicitly treat `NaN` values as falsy.
 
 </section>
@@ -230,10 +231,10 @@ console.log( idx );
 Returns the index of the last falsy element in a double-precision floating-point strided array.
 
 ```c
-const double x[] = { 1.0, 3.0, 0.0, 4.0 };
+const double x[] = { 1.0, 2.0, 3.0, 0.0 };
 
 int idx = stdlib_strided_dlast_index_of_falsy( 4, x, 1 );
-// returns 2
+// returns 3
 ```
 
 The function accepts the following arguments:
@@ -251,10 +252,10 @@ CBLAS_INT stdlib_strided_dlast_index_of_falsy( const CBLAS_INT N, const double *
 Returns the index of the last falsy element in a double-precision floating-point strided array using alternative indexing semantics.
 
 ```c
-const double x[] = { 1.0, 3.0, 0.0, 4.0 };
+const double x[] = { 1.0, 2.0, 3.0, 0.0 };
 
 int idx = stdlib_strided_dlast_index_of_falsy_ndarray( 4, x, 1, 0 );
-// returns 2
+// returns 3
 ```
 
 The function accepts the following arguments:
@@ -296,7 +297,7 @@ CBLAS_INT stdlib_strided_dlast_index_of_falsy_ndarray( const CBLAS_INT N, const 
 
 int main( void ) {
     // Create a strided array:
-    const double x[] = { 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 };
+    const double x[] = { 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 };
 
     // Specify the number of indexed elements:
     const int N = 8;
@@ -304,7 +305,7 @@ int main( void ) {
     // Specify a stride:
     const int strideX = 1;
 
-    // Find the index of the last falsy element:
+    // Perform a search:
     int idx = stdlib_strided_dlast_index_of_falsy( N, x, strideX );
 
     // Print the result:
