@@ -45,38 +45,32 @@ limitations under the License.
 
 <!-- Package usage documentation. -->
 
+<section class="installation">
 
+## Installation
+
+```bash
+npm install @stdlib/blas-ext-base-dlast-index-of-falsy
+```
+
+Alternatively,
+
+-   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
+-   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
+-   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
+
+The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
+
+To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
+
+</section>
 
 <section class="usage">
 
 ## Usage
 
-To use in Observable,
-
 ```javascript
-dlastIndexOfFalsy = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dlast-index-of-falsy@umd/browser.js' )
-```
-
-To vendor stdlib functionality and avoid installing dependency trees for Node.js, you can use the UMD server build:
-
-```javascript
-var dlastIndexOfFalsy = require( 'path/to/vendor/umd/blas-ext-base-dlast-index-of-falsy/index.js' )
-```
-
-To include the bundle in a webpage,
-
-```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dlast-index-of-falsy@umd/browser.js"></script>
-```
-
-If no recognized module system is present, access bundle contents via the global scope:
-
-```html
-<script type="text/javascript">
-(function () {
-    window.dlastIndexOfFalsy;
-})();
-</script>
+var dlastIndexOfFalsy = require( '@stdlib/blas-ext-base-dlast-index-of-falsy' );
 ```
 
 #### dlastIndexOfFalsy( N, x, strideX )
@@ -86,10 +80,10 @@ Returns the index of the last falsy element in a double-precision floating-point
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy( x.length, x, 1 );
-// returns 4
+// returns 5
 ```
 
 The function has the following parameters:
@@ -114,10 +108,10 @@ The `N` and stride parameters determine which elements in the strided array are 
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 0.0, 0.0, 2.0, 1.0, 3.0 ] );
 
-var idx = dlastIndexOfFalsy( 4, x, 2 );
-// returns 2
+var idx = dlastIndexOfFalsy( 3, x, 2 );
+// returns 1
 ```
 
 Note that indexing is relative to the first index. To introduce an offset, use [`typed array`][mdn-typed-array] views.
@@ -125,15 +119,15 @@ Note that indexing is relative to the first index. To introduce an offset, use [
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-// Initial array...
-var x0 = new Float64Array( [ 1.0, 3.0, 1.0, 0.0, 2.0, 1.0 ] );
+// Initial array:
+var x0 = new Float64Array( [ 1.0, 0.0, 1.0, 3.0, 5.0, 0.0 ] );
 
-// Create an offset view...
+// Create an offset view:
 var x1 = new Float64Array( x0.buffer, x0.BYTES_PER_ELEMENT*1 ); // start at 2nd element
 
-// Find index...
+// Find index:
 var idx = dlastIndexOfFalsy( 3, x1, 2 );
-// returns 1
+// returns 2
 ```
 
 #### dlastIndexOfFalsy.ndarray( N, x, strideX, offsetX )
@@ -143,10 +137,10 @@ Returns the index of the last falsy element in a double-precision floating-point
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 1.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy.ndarray( x.length, x, 1, 0 );
-// returns 4
+// returns 5
 ```
 
 The function has the following additional parameters:
@@ -158,7 +152,7 @@ While [`typed array`][mdn-typed-array] views mandate a view offset based on the 
 ```javascript
 var Float64Array = require( '@stdlib/array-float64' );
 
-var x = new Float64Array( [ 1.0, 3.0, 0.0, 2.0, 0.0, 4.0, 0.0, 3.0 ] );
+var x = new Float64Array( [ 1.0, 2.0, 3.0, 1.0, 4.0, 0.0, 0.0, 3.0 ] );
 
 var idx = dlastIndexOfFalsy.ndarray( 3, x, 1, x.length-3 );
 // returns 1
@@ -174,6 +168,7 @@ var idx = dlastIndexOfFalsy.ndarray( 3, x, 1, x.length-3 );
 
 ## Notes
 
+-   If `N <= 0`, both functions return `-1`.
 -   Both functions explicitly treat `NaN` values as falsy.
 
 </section>
@@ -188,14 +183,9 @@ var idx = dlastIndexOfFalsy.ndarray( 3, x, 1, x.length-3 );
 
 <!-- eslint no-undef: "error" -->
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/random-array-bernoulli@umd/browser.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dlast-index-of-falsy@umd/browser.js"></script>
-<script type="text/javascript">
-(function () {
+```javascript
+var bernoulli = require( '@stdlib/random-array-bernoulli' );
+var dlastIndexOfFalsy = require( '@stdlib/blas-ext-base-dlast-index-of-falsy' );
 
 var x = bernoulli( 10, 0.3, {
     'dtype': 'float64'
@@ -204,11 +194,6 @@ console.log( x );
 
 var idx = dlastIndexOfFalsy( x.length, x, 1 );
 console.log( idx );
-
-})();
-</script>
-</body>
-</html>
 ```
 
 </section>
@@ -217,7 +202,124 @@ console.log( idx );
 
 <!-- C interface documentation. -->
 
+* * *
 
+<section class="c">
+
+## C APIs
+
+<!-- Section to include introductory text. Make sure to keep an empty line after the intro `section` element and another before the `/section` close. -->
+
+<section class="intro">
+
+</section>
+
+<!-- /.intro -->
+
+<!-- C usage documentation. -->
+
+<section class="usage">
+
+### Usage
+
+```c
+#include "stdlib/blas/ext/base/dlast_index_of_falsy.h"
+```
+
+#### stdlib_strided_dlast_index_of_falsy( N, \*X, strideX )
+
+Returns the index of the last falsy element in a double-precision floating-point strided array.
+
+```c
+const double x[] = { 1.0, 2.0, 3.0, 0.0 };
+
+int idx = stdlib_strided_dlast_index_of_falsy( 4, x, 1 );
+// returns 3
+```
+
+The function accepts the following arguments:
+
+-   **N**: `[in] CBLAS_INT` number of indexed elements.
+-   **X**: `[in] double*` input array.
+-   **strideX**: `[in] CBLAS_INT` stride length.
+
+```c
+CBLAS_INT stdlib_strided_dlast_index_of_falsy( const CBLAS_INT N, const double *X, const CBLAS_INT strideX );
+```
+
+#### stdlib_strided_dlast_index_of_falsy_ndarray( N, \*X, strideX, offsetX )
+
+Returns the index of the last falsy element in a double-precision floating-point strided array using alternative indexing semantics.
+
+```c
+const double x[] = { 1.0, 2.0, 3.0, 0.0 };
+
+int idx = stdlib_strided_dlast_index_of_falsy_ndarray( 4, x, 1, 0 );
+// returns 3
+```
+
+The function accepts the following arguments:
+
+-   **N**: `[in] CBLAS_INT` number of indexed elements.
+-   **X**: `[in] double*` input array.
+-   **strideX**: `[in] CBLAS_INT` stride length.
+-   **offsetX**: `[in] CBLAS_INT` starting index.
+
+```c
+CBLAS_INT stdlib_strided_dlast_index_of_falsy_ndarray( const CBLAS_INT N, const double *X, const CBLAS_INT strideX, const CBLAS_INT offsetX );
+```
+
+</section>
+
+<!-- /.usage -->
+
+<!-- C API usage notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
+
+<section class="notes">
+
+### Notes
+
+-   Both functions explicitly treat `NaN` values as falsy.
+
+</section>
+
+<!-- /.notes -->
+
+<!-- C API usage examples. -->
+
+<section class="examples">
+
+### Examples
+
+```c
+#include "stdlib/blas/ext/base/dlast_index_of_falsy.h"
+#include <stdio.h>
+
+int main( void ) {
+    // Create a strided array:
+    const double x[] = { 1.0, 2.0, 3.0, 0.0, 4.0, 0.0, -1.0, 3.0 };
+
+    // Specify the number of indexed elements:
+    const int N = 8;
+
+    // Specify a stride:
+    const int strideX = 1;
+
+    // Perform a search:
+    int idx = stdlib_strided_dlast_index_of_falsy( N, x, strideX );
+
+    // Print the result:
+    printf( "index value: %d\n", idx );
+}
+```
+
+</section>
+
+<!-- /.examples -->
+
+</section>
+
+<!-- /.c -->
 
 <!-- Section to include cited references. If references are included, add a horizontal rule *before* the section. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
 
@@ -307,7 +409,7 @@ Copyright &copy; 2016-2026. The Stdlib [Authors][stdlib-authors].
 
 [stdlib-license]: https://raw.githubusercontent.com/stdlib-js/blas-ext-base-dlast-index-of-falsy/main/LICENSE
 
-[@stdlib/array/float64]: https://github.com/stdlib-js/array-float64/tree/umd
+[@stdlib/array/float64]: https://github.com/stdlib-js/array-float64
 
 [mdn-typed-array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
 
